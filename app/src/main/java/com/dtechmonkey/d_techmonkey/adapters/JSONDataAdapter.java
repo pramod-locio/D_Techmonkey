@@ -3,6 +3,7 @@ package com.dtechmonkey.d_techmonkey.adapters;
 import java.util.List;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -225,9 +226,6 @@ public class JSONDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public int getItemCount() {
         return postJSONData.size();
     }
-    public JSONDataAdapter(){
-
-    }
 
     public JSONDataAdapter(List<PostJSONData> postJSONData, ItemClickListener listener) {
         this.postJSONData = postJSONData;
@@ -241,5 +239,8 @@ public class JSONDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void flash() {
         postJSONData.clear();
         notifyDataSetChanged();
+    }
+    public void printData(String tag) {
+        Log.d(tag, "printData: " + getItemCount());
     }
 }

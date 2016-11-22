@@ -9,10 +9,12 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface PostRetrieve {
-    public static final int offset=0;
+    int OFFSET = 1;
+    int PER_PAGE_INITIAL = 11;
+    int PER_PAGE_AFTER = 10;
 
     @GET("wp-json/wp/v2/posts/")
-    Call<List<PostJSONData>> getPostList(@Query("page") int page);
+    Call<List<PostJSONData>> getPostList(@Query("page") int page, @Query("per_page") int perPageCount);
 
     /*@GET("wp-json/wp/v2/posts/?filter[posts_per_page]=31")
     Call<List<PostJSONData>> getPostList();*/
@@ -60,6 +62,6 @@ public interface PostRetrieve {
      */
 
     @GET("wp-json/wp/v2/posts/")
-    Call<List<PostJSONData>> getPostListCategory(@Query("filter[category_name]") String category);
+    Call<List<PostJSONData>> getPostListCategory(@Query("filter[category_name]") String category, @Query("page") int page, @Query("per_page") int perPageCount);
 
 }

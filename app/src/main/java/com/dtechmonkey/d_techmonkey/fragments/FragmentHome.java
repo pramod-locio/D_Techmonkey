@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Rect;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,7 +15,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.dtechmonkey.d_techmonkey.DetailActivity;
 import com.dtechmonkey.d_techmonkey.EndlessRecyclerViewScrollListener;
@@ -103,11 +101,10 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
             }
         });
         recyclerView.setAdapter(adapter);
-        scrollListener=new EndlessRecyclerViewScrollListener(gridLayoutManager)
-        {
+        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                makeRequest(page);
+            public void onLoadMore(int page) {
+                makeRequest(page, PostRetrieve.PER_PAGE_AFTER, false, false);
             }
         };
         recyclerView.addOnScrollListener(scrollListener);
@@ -141,9 +138,8 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onRefresh() {
-        adapter.flash();
-        makeRequest(PostRetrieve.offset);
-        refreshLayout.setRefreshing(false);
+        scrollListener.resetState();
+        makeRequest(PostRetrieve.OFFSET, PostRetrieve.PER_PAGE_INITIAL, false, true);
     }
 
     @Override
@@ -151,7 +147,7 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
         super.onResume();
         if(Utils.isNetworkAvailable(getContext())) {
             if (adapter.getItemCount()==0)
-                makeRequest(PostRetrieve.offset);
+                makeRequest(PostRetrieve.OFFSET, PostRetrieve.PER_PAGE_INITIAL, true, false);
         }
         /*else{
             internet.setText("No Internet Connection");
@@ -164,30 +160,39 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
 
     }
 
+    private void setSwipeRefreshingFalse() {
+        if (refreshLayout.isRefreshing()) {
+            refreshLayout.setRefreshing(false);
+        }
+    }
+
     // Request from JSON
-    public void makeRequest(int pageNumber) {
-        showPD();
+    public void makeRequest(int pageNumber, int perPageCount, final boolean showProgressDialog, final boolean clearData) {
+        if (showProgressDialog) showPD();
         try {
             PostRetrieve client = TopYapsServiceGen.createService(PostRetrieve.class);
             Call<List<PostJSONData>> call;
             if (position == 0) {
-                call = client.getPostList(pageNumber);
+                call = client.getPostList(pageNumber, perPageCount);
             } else {
-                call = client.getPostListCategory(category);
+                call = client.getPostListCategory(category, pageNumber, perPageCount);
             }
 
             call.enqueue(new Callback<List<PostJSONData>>() {
                 @Override
                 public void onResponse(Call<List<PostJSONData>> call, Response<List<PostJSONData>> response) {
-                    hidePD();
+                    if (showProgressDialog) hidePD();
+                    if (clearData) adapter.flash();
+                    setSwipeRefreshingFalse();
                     List<PostJSONData> postJSONData = response.body();
                     adapter.addData(postJSONData);
+                    adapter.printData(TAG);
                 }
 
                 @Override
                 public void onFailure(Call<List<PostJSONData>> call, Throwable t) {
-                    progressDialog.hide();
-                    progressDialog = null;
+                    if (showProgressDialog) hidePD();
+                    setSwipeRefreshingFalse();
                     Log.e(TAG, t.toString());
                     hidePD();
                 }

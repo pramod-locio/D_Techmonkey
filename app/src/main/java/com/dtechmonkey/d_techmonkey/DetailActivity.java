@@ -2,14 +2,9 @@ package com.dtechmonkey.d_techmonkey;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,12 +13,9 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.dtechmonkey.d_techmonkey.adapters.JSONDataAdapter;
 import com.dtechmonkey.d_techmonkey.helper.Constants;
-import com.dtechmonkey.d_techmonkey.helper.Utils;
 import com.dtechmonkey.d_techmonkey.models.PostJSONData;
 
 import java.util.List;
@@ -58,6 +50,7 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         postJSONData = (PostJSONData) intent.getSerializableExtra(Constants.REFERENCE.TOPYAPS_DATA);
+        Log.d(TAG, "onCreate: " + postJSONData.toString());
 
         // title on collapsing toolbar
         /*collapsing_container = (CollapsingToolbarLayout) findViewById(R.id.collapsing_container);
@@ -77,6 +70,11 @@ public class DetailActivity extends AppCompatActivity {
         date.setText("Originally Posted on "+postJSONData.getDateGmt());
 
         content=postJSONData.getContent().getRendered();
+        webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setLoadsImagesAutomatically(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadData(content, "text/html;", "utf-8");
         viewResponse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +86,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        makeRequest();
+        //makeRequest();
     }
 
     private void configView()
@@ -100,13 +98,13 @@ public class DetailActivity extends AppCompatActivity {
         viewResponse=(Button)findViewById(R.id.view_response);
     }
 
-    public void makeRequest() {
+    /*public void makeRequest() {
         progressDialog = new ProgressDialog(getApplicationContext());
         progressDialog.setMessage("Loading Content....");
 
         try {
             PostRetrieve client = TopYapsServiceGen.createService(PostRetrieve.class);
-            Call<List<PostJSONData>> call = client.getPostList(client.offset);
+            Call<List<PostJSONData>> call = client.getPostList(client.OFFSET);
             call.enqueue(new Callback<List<PostJSONData>>() {
                 @Override
                 public void onResponse(Call<List<PostJSONData>> call, Response<List<PostJSONData>> response) {
@@ -129,7 +127,7 @@ public class DetailActivity extends AppCompatActivity {
         catch (Exception e){
             e.printStackTrace();
         }
-    }
+    }*/
 
     //Go back most recent parent
     @Override
