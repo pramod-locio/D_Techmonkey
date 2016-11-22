@@ -2,11 +2,7 @@ package com.dtechmonkey.d_techmonkey.adapters;
 
 import java.util.List;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
-import com.dtechmonkey.d_techmonkey.OnLoadMoreListener;
 import com.dtechmonkey.d_techmonkey.R;
 import com.dtechmonkey.d_techmonkey.models.PostJSONData;
-
-import org.w3c.dom.Text;
 
 public class JSONDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -243,6 +236,10 @@ public class JSONDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void addData(List<PostJSONData> dataList) {
         postJSONData.addAll(dataList);
+        notifyDataSetChanged();
+    }
+    public void flash() {
+        postJSONData.clear();
         notifyDataSetChanged();
     }
 }

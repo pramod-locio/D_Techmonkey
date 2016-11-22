@@ -8,16 +8,13 @@
     tools:context=".DetailActivity">
 
     <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="2dp"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/detail_title"
@@ -25,8 +22,8 @@
                 android:layout_height="wrap_content"
                 android:text="TITLE"
                 android:layout_marginTop="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:textSize="23sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
@@ -38,14 +35,16 @@
                 android:text="DATE"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="4dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:textSize="15sp"
                 android:textColor="@color/grey"/>
 
             <WebView
                 android:id="@+id/card_view_content"
-                android:layout_width="match_parent"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent">
             </WebView>
             <Button

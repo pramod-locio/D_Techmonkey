@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.dtechmonkey.d_techmonkey.adapters.JSONDataAdapter;
 import com.dtechmonkey.d_techmonkey.helper.Constants;
+import com.dtechmonkey.d_techmonkey.helper.Utils;
 import com.dtechmonkey.d_techmonkey.models.PostJSONData;
 
 import java.util.List;
@@ -76,13 +77,18 @@ public class DetailActivity extends AppCompatActivity {
         date.setText("Originally Posted on "+postJSONData.getDateGmt());
 
         content=postJSONData.getContent().getRendered();
-        makeRequest();
         viewResponse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(DetailActivity.this, AddComment.class));
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        makeRequest();
     }
 
     private void configView()
@@ -100,7 +106,7 @@ public class DetailActivity extends AppCompatActivity {
 
         try {
             PostRetrieve client = TopYapsServiceGen.createService(PostRetrieve.class);
-            Call<List<PostJSONData>> call = client.getPostList();
+            Call<List<PostJSONData>> call = client.getPostList(client.offset);
             call.enqueue(new Callback<List<PostJSONData>>() {
                 @Override
                 public void onResponse(Call<List<PostJSONData>> call, Response<List<PostJSONData>> response) {
@@ -116,11 +122,12 @@ public class DetailActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<List<PostJSONData>> call, Throwable t) {
                     Log.e(TAG, t.toString());
+                    progressDialog.hide();
                 }
             });
         }
         catch (Exception e){
-
+            e.printStackTrace();
         }
     }
 

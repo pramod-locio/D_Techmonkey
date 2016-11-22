@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dtechmonkey.d_techmonkey.DetailActivity;
+import com.dtechmonkey.d_techmonkey.EndlessRecyclerViewScrollListener;
 import com.dtechmonkey.d_techmonkey.MainActivity;
 import com.dtechmonkey.d_techmonkey.PostRetrieve;
 import com.dtechmonkey.d_techmonkey.R;
@@ -39,6 +40,8 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
     private RecyclerView recyclerView;
     private JSONDataAdapter adapter;
     private ProgressDialog progressDialog;
+
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     private String category;
     private int position;
@@ -99,6 +102,14 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
             }
         });
         recyclerView.setAdapter(adapter);
+        scrollListener=new EndlessRecyclerViewScrollListener(gridLayoutManager)
+        {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                makeRequest(page);
+            }
+        };
+        recyclerView.addOnScrollListener(scrollListener);
         /*recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -129,7 +140,8 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onRefresh() {
-        //makeRequest();
+        adapter.flash();
+        makeRequest(PostRetrieve.offset);
         refreshLayout.setRefreshing(false);
     }
 
@@ -137,7 +149,8 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
     public void onResume() {
         super.onResume();
         if(Utils.isNetworkAvailable(getContext())) {
-            makeRequest();
+            if (adapter.getItemCount()==0)
+                makeRequest(PostRetrieve.offset);
         }
         else{
             internet.setText("No Internet Connection");
@@ -151,15 +164,13 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     // Request from JSON
-    public void makeRequest() {
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Loading Data....");
-        progressDialog.show();
+    public void makeRequest(int pageNumber) {
+        showPD();
         try {
             PostRetrieve client = TopYapsServiceGen.createService(PostRetrieve.class);
             Call<List<PostJSONData>> call;
             if (position == 0) {
-                call = client.getPostList();
+                call = client.getPostList(pageNumber);
             } else {
                 call = client.getPostListCategory(category);
             }
@@ -167,22 +178,20 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
             call.enqueue(new Callback<List<PostJSONData>>() {
                 @Override
                 public void onResponse(Call<List<PostJSONData>> call, Response<List<PostJSONData>> response) {
-                    progressDialog.hide();
+                    hidePD();
                     List<PostJSONData> postJSONData = response.body();
                     adapter.addData(postJSONData);
-               /* for(PostJSONData post : postJSONData) {
-                    Log.d("MainActivity", post.getId() + "");
-                    Log.d("MainActivity", post.getDateGmt());
-                }*/
                 }
 
                 @Override
                 public void onFailure(Call<List<PostJSONData>> call, Throwable t) {
                     Log.e(TAG, t.toString());
+                    hidePD();
                 }
             });
         }
         catch (Exception e){
+            e.printStackTrace();
 
         }
     }
@@ -226,5 +235,20 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
     private int dpToPx(int dp) {
         Resources resources=getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dp,resources.getDisplayMetrics()));
+    }
+    public void showPD(){
+        if(progressDialog==null){
+            progressDialog=new ProgressDialog(getContext());
+            progressDialog.setMessage("Data Loading....");
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(true);
+            progressDialog.show();
+        }
+    }
+    public void hidePD(){
+        if (progressDialog!=null){
+            progressDialog.dismiss();
+            progressDialog=null;
+        }
     }
 }

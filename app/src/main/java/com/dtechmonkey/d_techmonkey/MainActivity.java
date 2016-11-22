@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -61,16 +62,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(Intent.ACTION_SEARCH.equals(searchIntent.getAction())){
             String query=searchIntent.getStringExtra(SearchManager.QUERY);
             Toast.makeText(MainActivity.this, query,Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
         }
     }
 
@@ -167,8 +158,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //Setting the current page
                 viewPager.setCurrentItem(10);
                 break;
+            case R.id.lang_edit:
+                startActivity(new Intent(getApplicationContext(),Language.class));
+            case R.id.lang_app:
+                Toast.makeText(getApplicationContext(),"This working",Toast.LENGTH_SHORT).show();
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+    //when back press terminate application
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

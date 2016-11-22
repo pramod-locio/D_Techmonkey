@@ -9,9 +9,13 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface PostRetrieve {
+    public static final int offset=0;
 
-    @GET("wp-json/wp/v2/posts/?filter[posts_per_page]=21")
-    Call<List<PostJSONData>> getPostList();
+    @GET("wp-json/wp/v2/posts/")
+    Call<List<PostJSONData>> getPostList(@Query("page") int page);
+
+    /*@GET("wp-json/wp/v2/posts/?filter[posts_per_page]=31")
+    Call<List<PostJSONData>> getPostList();*/
     /*@GET("wp-json/wp/v2/posts/?filter[category_name]=news")
     Call<List<PostJSONData>> getListNews();
 
