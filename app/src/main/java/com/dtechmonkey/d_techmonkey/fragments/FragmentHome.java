@@ -1,6 +1,7 @@
 package com.dtechmonkey.d_techmonkey.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -36,7 +37,7 @@ import retrofit2.Response;
 
 public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefreshListener /*implements JSONDataAdapter.HomeItemClickListener*/ {
     private SwipeRefreshLayout refreshLayout;
-    private TextView internet;
+    /*private TextView internet;*/
     private RecyclerView recyclerView;
     private JSONDataAdapter adapter;
     private ProgressDialog progressDialog;
@@ -74,7 +75,7 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view_home);
         refreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_layout);
-        internet=(TextView)view.findViewById(R.id.internet);
+        /*internet=(TextView)view.findViewById(R.id.internet);*/
 
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -152,10 +153,10 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
             if (adapter.getItemCount()==0)
                 makeRequest(PostRetrieve.offset);
         }
-        else{
+        /*else{
             internet.setText("No Internet Connection");
             //makeRequestFromDB();
-        }
+        }*/
     }
 
     //Request from Database
@@ -185,6 +186,8 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
 
                 @Override
                 public void onFailure(Call<List<PostJSONData>> call, Throwable t) {
+                    progressDialog.hide();
+                    progressDialog = null;
                     Log.e(TAG, t.toString());
                     hidePD();
                 }
@@ -192,7 +195,6 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
         }
         catch (Exception e){
             e.printStackTrace();
-
         }
     }
     // for defining the size of the image
@@ -232,10 +234,11 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
     }*/
 
     // conversion dp to pixel
-    private int dpToPx(int dp) {
-        Resources resources=getResources();
+    private static int dpToPx(Context context, int dp) {
+        Resources resources= context.getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dp,resources.getDisplayMetrics()));
     }
+
     public void showPD(){
         if(progressDialog==null){
             progressDialog=new ProgressDialog(getContext());
@@ -245,6 +248,7 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
             progressDialog.show();
         }
     }
+
     public void hidePD(){
         if (progressDialog!=null){
             progressDialog.dismiss();

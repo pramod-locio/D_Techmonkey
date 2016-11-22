@@ -16,6 +16,12 @@ public interface PostRetrieve {
 
     /*@GET("wp-json/wp/v2/posts/?filter[posts_per_page]=31")
     Call<List<PostJSONData>> getPostList();*/
+    /**
+     * http://topyaps.com/wp-json/wp/v2/posts/?page=3
+     */
+
+    @GET("wp-json/wp/v2/posts/?filter[posts_per_page]=21")
+    Call<List<PostJSONData>> getPostList();
     /*@GET("wp-json/wp/v2/posts/?filter[category_name]=news")
     Call<List<PostJSONData>> getListNews();
 
@@ -46,6 +52,13 @@ public interface PostRetrieve {
     @GET("wp-json/wp/v2/posts/?filter[category_name]=opinion")
     Call<List<PostJSONData>> getListOpinion();
 */
+
+    /**
+     * http://topyaps.com/wp-json/wp/v2/posts/?filter[category_name]=news&page=3
+     * @param category
+     * @return
+     */
+
     @GET("wp-json/wp/v2/posts/")
     Call<List<PostJSONData>> getPostListCategory(@Query("filter[category_name]") String category);
 
