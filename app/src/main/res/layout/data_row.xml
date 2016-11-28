@@ -18,12 +18,9 @@
         <ImageView
             android:id="@+id/thumbnail"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="wrap_content"
             android:background="@color/application_background"
-            android:clickable="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/photo" />
-
+            android:scaleType="center"/>
         <TextView
             android:id="@+id/image_title"
             android:layout_width="match_parent"

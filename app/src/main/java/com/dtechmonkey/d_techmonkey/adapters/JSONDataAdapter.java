@@ -3,6 +3,7 @@ package com.dtechmonkey.d_techmonkey.adapters;
 import java.util.List;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -183,7 +184,7 @@ public class JSONDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final  int position) {
         if (holder instanceof MyViewHolder) {
             MyViewHolder myViewHolder = (MyViewHolder) holder;
-            myViewHolder.title.setText(postJSONData.get(position).getTitle().getRendered().replaceAll("(&#8216;)|(&#8217;)|(&#8221;)|(&#8220;)","\'"));
+            myViewHolder.title.setText(postJSONData.get(position).getTitle().getRendered().replaceAll("(&#8216;)|(&#038;)|(<i>)|(</i>)|(&#8217;)|(&#8221;)|(&#8220;)","\'"));
             myViewHolder.subTitle.setText(postJSONData.get(position).getDateGmt());
 
             //Log.d("ABCD", postJSONData.get(position).getId() + "");
@@ -241,5 +242,8 @@ public class JSONDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void flash() {
         postJSONData.clear();
         notifyDataSetChanged();
+    }
+    public void printData(String tag) {
+        Log.d(tag, "printData: " + getItemCount());
     }
 }

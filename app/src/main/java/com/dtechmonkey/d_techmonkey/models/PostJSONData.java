@@ -330,4 +330,10 @@ public class PostJSONData implements Serializable{
     public void setLinks(Links links) {
         this.links = links;
     }
+
+    @Override
+    public String toString() {
+        return "Title: " + this.title.getRendered() + "\n"
+                + "Content: " + this.content.getRendered() + "\n";
+    }
 }

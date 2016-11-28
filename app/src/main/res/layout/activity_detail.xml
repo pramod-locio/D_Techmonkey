@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/coordinate_layout"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:fitsSystemWindows="false"
     tools:context=".DetailActivity">
 
     <android.support.v4.widget.NestedScrollView
-        android:layout_width="wrap_content"
+        android:id="@+id/nested_scroll"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -40,13 +42,59 @@
                 android:textSize="15sp"
                 android:textColor="@color/grey"/>
 
-            <WebView
-                android:id="@+id/card_view_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-            </WebView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/author_img"
+                    android:layout_margin="5dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/photo" />
+
+                <TextView
+                    android:id="@+id/author_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Author Name"
+                    android:textColor="@color/grey"
+                    android:layout_marginLeft="5dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/webview_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <WebView
+                        android:id="@+id/webView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal" />
+
+                    <!--<ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:indeterminateTint="@color/colorPrimary"
+                        android:indeterminateTintMode="src_atop" />-->
+
+                </FrameLayout>
+            </LinearLayout>
             <Button
                 android:id="@+id/view_response"
                 android:layout_width="match_parent"
@@ -58,26 +106,25 @@
                 android:text="@string/view_response"
                 android:textColor="@color/textColorPrimary"
                 android:textStyle="bold"
-                android:background="@color/background_toolbarandtab">
+                android:background="@color/background_toolBarandTab">
             </Button>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/my_appbar_container"
+        android:id="@+id/appBar_layout"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:backgroundTint="@color/application_background"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:contentScrim="@color/background_toolbarandtab"
-            app:expandedTitleMarginEnd="10dp"
-            app:expandedTitleMarginStart="10dp"
+            android:layout_height="250dp"
+            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             android:fitsSystemWindows="true">
 
@@ -86,7 +133,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax" />
 
             <android.support.v7.widget.Toolbar
@@ -98,5 +145,19 @@
                 app:theme="@style/BackwardArrow" />
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+
+        android:src="@drawable/ic_action_share"
+        app:backgroundTint="#ff4c4c"
+        app:layout_anchorGravity="bottom|right|end"
+        app:layout_behavior="com.dtechmonkey.d_techmonkey.FAB_Hide_on_Scroll"/>
 
 </android.support.design.widget.CoordinatorLayout>

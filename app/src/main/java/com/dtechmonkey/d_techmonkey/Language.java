@@ -44,9 +44,7 @@ public class Language extends AppCompatActivity {
                 new View.OnClickListener(){
                     @Override
                     public void onClick(View view){
-                        Intent intent=new Intent("com.dtechmonkey.d_techmonkey.MainActivity");
-                        //implement here code of language selection
-                        startActivity(intent);
+                        startActivity(new Intent("com.dtechmonkey.d_techmonkey.MainActivity"));
                     }
                 }
         );

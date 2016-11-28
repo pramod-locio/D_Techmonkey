@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name"></string>
+    <string name="app_name">TopYaps</string>
     <string name="action_delete">Search</string>
     <string name="title">TOPYAPS</string>
     <string name="title_home">Home</string>
@@ -20,7 +20,7 @@
     <string name="action_favourite">favourite</string>
     <string name="searchable">Search...</string>
     <string name="s">Searchable</string>
-    <string name="add_comment">Add Comment</string>
+    <string name="add_comment">Comments</string>
     <string name="summary">Summary</string>
     <string name="view_response">View Response</string>
     <string-array name="languages">

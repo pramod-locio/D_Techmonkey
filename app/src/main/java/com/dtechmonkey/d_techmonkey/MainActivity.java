@@ -160,8 +160,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.lang_edit:
                 startActivity(new Intent(getApplicationContext(),Language.class));
+                break;
             case R.id.lang_app:
                 Toast.makeText(getApplicationContext(),"This working",Toast.LENGTH_SHORT).show();
+                break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -169,9 +171,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //when back press terminate application
     @Override
     public void onBackPressed() {
+        super.onBackPressed();/*
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        startActivity(intent);*/
     }
 }
