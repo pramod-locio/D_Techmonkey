@@ -10,10 +10,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,9 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.dtechmonkey.d_techmonkey.adapters.JSONDataAdapter;
 import com.dtechmonkey.d_techmonkey.helper.Constants;
-import com.dtechmonkey.d_techmonkey.helper.Utils;
 import com.dtechmonkey.d_techmonkey.models.PostJSONData;
 
 import java.util.List;

@@ -226,9 +226,6 @@ public class JSONDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public int getItemCount() {
         return postJSONData.size();
     }
-    public JSONDataAdapter(){
-
-    }
 
     public JSONDataAdapter(List<PostJSONData> postJSONData, ItemClickListener listener) {
         this.postJSONData = postJSONData;

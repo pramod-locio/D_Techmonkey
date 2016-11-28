@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Rect;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,7 +15,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.dtechmonkey.d_techmonkey.DetailActivity;
 import com.dtechmonkey.d_techmonkey.EndlessRecyclerViewScrollListener;
@@ -170,7 +168,7 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
 
     // Request from JSON
     public void makeRequest(int pageNumber, int perPageCount, final boolean showProgressDialog, final boolean clearData) {
-        showPD();
+        if (showProgressDialog) showPD();
         try {
             PostRetrieve client = TopYapsServiceGen.createService(PostRetrieve.class);
             Call<List<PostJSONData>> call;
