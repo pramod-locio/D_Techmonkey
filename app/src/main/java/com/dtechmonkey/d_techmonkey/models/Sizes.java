@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 public class Sizes implements Serializable {
 
-    @SerializedName("post-thumbnail")
+    @SerializedName("large")
     @Expose
     private MediumThumb mediumThumb;
 

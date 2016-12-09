@@ -21,7 +21,6 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="com.dtechmonkey.d_techmonkey.MainActivity" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>

@@ -5,8 +5,11 @@ import com.dtechmonkey.d_techmonkey.adapters.*;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -15,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private DrawerLayout drawerLayout;
@@ -30,12 +35,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TabLayout tabLayout;
     private ViewPager viewPager=null;
     private Toolbar toolbar;
+    private boolean doubleBackToExitPressedOnce=false;
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    public static final String LANGUAGE_SELECTOR = "language";
+
+    public static final int LANGUAGE_SELECTOR_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+       /* ArrayList<String> languages = getIntent().getStringArrayListExtra(Language.LANGUAGES_SELECTED);
+        if (languages != null && !languages.isEmpty()) {
+            Log.d(TAG, "intent recieved");
+            for (String language : languages) {
+                //Log.d(TAG, language);
+            }
+        }*/
         //Toolbar
         toolbar=(Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
@@ -159,22 +178,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 viewPager.setCurrentItem(10);
                 break;
             case R.id.lang_edit:
-                startActivity(new Intent(getApplicationContext(),Language.class));
+                Intent intent = new Intent(MainActivity.this ,Language.class);
+                intent.putExtra(LANGUAGE_SELECTOR, false);
+                startActivityForResult(intent, LANGUAGE_SELECTOR_REQUEST_CODE);
+                finish();
                 break;
             case R.id.lang_app:
-                Toast.makeText(getApplicationContext(),"This working",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"This working",Toast.LENGTH_SHORT).show();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-    //when back press terminate application
+    //when double back press terminate application
     @Override
     public void onBackPressed() {
-        super.onBackPressed();/*
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);*/
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Press again to close TopYaps", Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 1000);
+
+    }
+
+    @Override
+    public void onActivityResult(int requsetCode, int resultCode, Intent data) {
+        if (requsetCode == LANGUAGE_SELECTOR_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                ArrayList<String> languages = data.getStringArrayListExtra(Language.LANGUAGES_SELECTED);
+                for (String language : languages) {
+                    Log.d(TAG, language);
+                }
+            }
+        }
     }
 }

@@ -50,12 +50,13 @@ public class AddComment extends AppCompatActivity {
         onBackPressed();
         return true;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_comment);
 
-        Toolbar toolbar=(Toolbar)findViewById(R.id.add_comment_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.add_comment_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.add_comment);
@@ -106,12 +107,10 @@ public class AddComment extends AppCompatActivity {
 
     private void setLoading(boolean isLoading) {
         this.isLoading = isLoading;
-
         if (isLoading)
             progressBar.setVisibility(View.VISIBLE);
         else
             progressBar.setVisibility(View.GONE);
-
         invalidateOptionsMenu();
     }
 
@@ -139,22 +138,18 @@ public class AddComment extends AppCompatActivity {
                         mContainer.removeView(mWebviewPop);
                         loadComments();
                     }
-                }, 600);
+                }, 1000);
             }
         }
-
         @Override
-        public void onReceivedSslError(WebView view, SslErrorHandler handler,
-                                       SslError error) {
+        public void onReceivedSslError(WebView view, SslErrorHandler handler,SslError error) {
             setLoading(false);
         }
     }
 
     class UriChromeClient extends WebChromeClient {
-
         @Override
-        public boolean onCreateWindow(WebView view, boolean isDialog,
-                                      boolean isUserGesture, Message resultMsg) {
+        public boolean onCreateWindow(WebView view, boolean isDialog,boolean isUserGesture, Message resultMsg) {
             mWebviewPop = new WebView(getApplicationContext());
             mWebviewPop.setVerticalScrollBarEnabled(false);
             mWebviewPop.setHorizontalScrollBarEnabled(false);
@@ -165,13 +160,11 @@ public class AddComment extends AppCompatActivity {
             mWebviewPop.getSettings().setSupportZoom(false);
             mWebviewPop.getSettings().setBuiltInZoomControls(false);
             mWebviewPop.getSettings().setSupportMultipleWindows(true);
-            mWebviewPop.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
+            mWebviewPop.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
             mContainer.addView(mWebviewPop);
             WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
             transport.setWebView(mWebviewPop);
             resultMsg.sendToTarget();
-
             return true;
         }
 
@@ -191,8 +184,7 @@ public class AddComment extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
        /* if (!isLoading) {
             getMenuInflater().inflate(R.menu.fb_comments, menu);
-        }
-*/
+        }*/
         return true;
     }
 
@@ -202,11 +194,9 @@ public class AddComment extends AppCompatActivity {
             onBackPressed();
             return true;
         }
-
        /* if (item.getItemId() == R.id.action_refresh) {
             mWebViewComments.reload();
         }*/
-
         return super.onOptionsItemSelected(item);
     }
 }

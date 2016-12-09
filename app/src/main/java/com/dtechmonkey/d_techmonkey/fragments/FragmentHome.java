@@ -3,6 +3,7 @@ package com.dtechmonkey.d_techmonkey.fragments;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 
 import com.dtechmonkey.d_techmonkey.DetailActivity;
 import com.dtechmonkey.d_techmonkey.EndlessRecyclerViewScrollListener;
+import com.dtechmonkey.d_techmonkey.Language;
 import com.dtechmonkey.d_techmonkey.MainActivity;
 import com.dtechmonkey.d_techmonkey.PostRetrieve;
 import com.dtechmonkey.d_techmonkey.R;
@@ -33,16 +35,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefreshListener /*implements JSONDataAdapter.HomeItemClickListener*/ {
     private SwipeRefreshLayout refreshLayout;
     /*private TextView internet;*/
+    private static final String[]TYLanguage={"english_lang","hindi","bengali"};
     private RecyclerView recyclerView;
     private JSONDataAdapter adapter;
     private ProgressDialog progressDialog;
-
     private EndlessRecyclerViewScrollListener scrollListener;
-
-    private String category;
+    private String category,selectedLanguage;
     private int position;
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -71,6 +74,8 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        SharedPreferences sharedPreferences=getContext().getSharedPreferences(getString(R.string.LANG_FILE),MODE_PRIVATE);
+        selectedLanguage=sharedPreferences.getString(getString(R.string.LANGUAGE),"");
         recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view_home);
         refreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_layout);
         /*internet=(TextView)view.findViewById(R.id.internet);*/
@@ -168,14 +173,26 @@ public class FragmentHome  extends Fragment implements SwipeRefreshLayout.OnRefr
 
     // Request from JSON
     public void makeRequest(int pageNumber, int perPageCount, final boolean showProgressDialog, final boolean clearData) {
+
         if (showProgressDialog) showPD();
         try {
             PostRetrieve client = TopYapsServiceGen.createService(PostRetrieve.class);
             Call<List<PostJSONData>> call;
             if (position == 0) {
-                call = client.getPostList(pageNumber, perPageCount);
-            } else {
-                call = client.getPostListCategory(category,pageNumber,perPageCount);
+                if(selectedLanguage.equals(TYLanguage[0]))
+                        call=client.getPostListEng(selectedLanguage,pageNumber, perPageCount);
+                else if(selectedLanguage.equals(TYLanguage[1]) || selectedLanguage.equals(TYLanguage[2]))
+                        call=client.getPostListMix(selectedLanguage,pageNumber,perPageCount);
+                else
+                    call=client.getPostList(pageNumber,perPageCount);
+                }
+             else {
+                if(selectedLanguage.equals(TYLanguage[0]))
+                    call=client.getPostListCategoryWithLanguageEng(category,selectedLanguage,pageNumber, perPageCount);
+                else if(selectedLanguage.equals(TYLanguage[1]) || selectedLanguage.equals(TYLanguage[2]))
+                    call=client.getPostListCategoryWithLanguageMix(category,selectedLanguage,pageNumber,perPageCount);
+                else
+                    call=client.getPostListCategory(category,pageNumber,perPageCount);
             }
 
             call.enqueue(new Callback<List<PostJSONData>>() {

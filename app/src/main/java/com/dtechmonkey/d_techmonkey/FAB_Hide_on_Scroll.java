@@ -5,28 +5,45 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 public class FAB_Hide_on_Scroll extends FloatingActionButton.Behavior {
+
+    private static final String TAG = FAB_Hide_on_Scroll.class.getSimpleName();
 
     public FAB_Hide_on_Scroll(Context context, AttributeSet attrs) {
         super();
     }
 
     @Override
-    public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
-        super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
-
-        //child -> Floating Action Button
-        if (child.getVisibility() == View.VISIBLE && dyConsumed >0) {
+    public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target, int dx, int dy, int[] consumed) {
+        super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed);
+        if (child.getVisibility() == View.VISIBLE && dy != 0) {
             child.hide();
-        } else if (child.getVisibility() == View.GONE ) {
-            child.show();
         }
     }
 
     @Override
+    public boolean onNestedPreFling(CoordinatorLayout layout, FloatingActionButton child, View target, float velocityX, float velocityY) {
+        boolean fling = super.onNestedPreFling(layout, child, target, velocityX, velocityY);
+        if (velocityY >= 0 && child.getVisibility() == View.VISIBLE) {
+            child.hide();
+        }
+        return fling;
+    }
+
+    @Override
     public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View directTargetChild, View target, int nestedScrollAxes) {
-        return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL;
+        return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL || super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target, nestedScrollAxes);
+    }
+
+    @Override
+    public void onStopNestedScroll(CoordinatorLayout layout, FloatingActionButton child, View target) {
+        super.onStopNestedScroll(layout, child, target);
+        Log.d(TAG, "onStopNestedScroll: " + String.valueOf(child.getVisibility() != View.VISIBLE));
+        if (child.getVisibility() != View.VISIBLE) {
+            child.show();
+        }
     }
 }

@@ -1,13 +1,7 @@
 package com.dtechmonkey.d_techmonkey;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,31 +9,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dtechmonkey.d_techmonkey.helper.Constants;
 import com.dtechmonkey.d_techmonkey.models.PostJSONData;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static java.text.DateFormat.getDateTimeInstance;
 
 public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
     private FloatingActionButton fab;
@@ -48,13 +25,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     private TextView title,date,authorName;
     private String content,subject,link;
     private Button viewResponse;
-    private int userID;
-    private String url=Constants.REFERENCE.TOPYAPS_DATA;
+    private int authorId;
     //private CollapsingToolbarLayout collapsing_container;
 
     private PostJSONData postJSONData;
 
-    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,22 +43,20 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         Intent intent = getIntent();
         postJSONData = (PostJSONData) intent.getSerializableExtra(Constants.REFERENCE.TOPYAPS_DATA);
 
-        userID=postJSONData.getAuthor();
         // title on collapsing toolbar
         /*collapsing_container = (CollapsingToolbarLayout) findViewById(R.id.collapsing_container);
         collapsing_container.setTitle(postJSONData.getTitle().getRendered());
 */
         configView();
         try {
-            Glide.with(getApplicationContext()).load(postJSONData.getBetterFeaturedImage()
-                    .getMediaDetails().getSizes().getMediumThumb().getSourceUrl())
-                    .into(currentImage);
+            Glide.with(getApplicationContext()).load(postJSONData.getBetterFeaturedImage().getSourceUrl()).into(currentImage);
         } catch (Exception e) {
             e.printStackTrace();
         }
         subject=postJSONData.getTitle().getRendered().replaceAll("(&#8216;)|(&#038;)|(<i>)|(</i>)|(&#8217;)|(&#8221;)|(&#8220;)","\'");
         link=postJSONData.getLink();
         title.setText(subject);
+        authorId=postJSONData.getAuthor();
         date.setText("Originally Posted on "+postJSONData.getDateGmt());
         try {
             //Glide.with(this).load("http://topyaps.com/author/anuradha/").into(authorImage);
@@ -93,24 +66,53 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         catch (Exception e){
             e.printStackTrace();
         }
+        authorName.setText(postJSONData.getAuthor());
 
         content=postJSONData.getContent().getRendered();
-        webView.setWebViewClient(new MyWebViewClient());
-        webView.addJavascriptInterface(new MyJavaScriptInterface(this),"Android");
-        webView.loadData(content, "text/html; charset=utf-8","utf-8");
-        webView.getSettings().setDefaultTextEncodingName("utf-8");
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebChromeClient(new WebChromeClient());
-        webView.getSettings().setLoadsImagesAutomatically(true);
-        webView.setHorizontalScrollBarEnabled(false);
+        StringBuilder html = new StringBuilder();
+        try{
+            html.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"hottopix-hi-IN\" prefix=\"og: http://ogp.me/ns#\">");
+            html.append("<head>");
+            html.append("<meta name=\"viewport\" content=\"initial-scale=1.0, maximum-scale=3.0, user-scalable=no, width=device-width\">");
+            html.append("<style>\n" +"   iframe {  \n" +
+                    "   width:100%; \n" +
+                    "   height:auto; \n" + "}"+
 
-        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+                    "a{color: #777;}"+
 
+                    ".post img, img, .aligncenter  {\n" +
+                    "max-width: 100%;\n" +
+                    "height: auto;\n" +
+                    "margin-top: 15px;\n" +
+                    "margin-bottom: 15px;\n" + "}\n" +
+
+                    ".aligncenter, .alignnone {\n" +
+                    "text-align: center!important;\n" +
+                    "margin-left: auto!important;\n" +
+                    "margin-right: auto!important;\n" +
+                    "float: none!important;\n" +
+                    "display: block!important;\n" + "}");
+
+            html.append("</style>");
+            html.append("<script src=\"http://platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>");
+            html.append("</head>");
+            html.append("<body >");
+            html.append("<div class=\"post \"><div class=\"post-page-content\">");
+            html.append("<div class=\"videoWrapper\">");
+            html.append(content);
+            html.append("</div></div>");
+            html.append("</body></html>");
+            webView.getSettings().setJavaScriptEnabled(true);
+            webView.loadData(html.toString(), "text/html; charset=utf-8","utf-8");
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         viewResponse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(DetailActivity.this, AddComment.class));
+                addComment();
             }
         });
 
@@ -129,7 +131,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         authorImage=(ImageView)findViewById(R.id.author_img);
         fab=(FloatingActionButton)findViewById(R.id.fab);
         currentImage=(ImageView)findViewById(R.id.detail_imgView);
-        webView=(WebView)findViewById(R.id.webView);
+        webView=(WebView)findViewById(R.id.card_view_content);
         title=(TextView)findViewById(R.id.detail_title);
         date=(TextView)findViewById(R.id.detail_date);
         viewResponse=(Button)findViewById(R.id.view_response);
@@ -154,10 +156,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         int id = menuItem.getItemId();
         switch(id)
         {
-            /*case R.id.detail_share:
-                shareIt();
-                break;
-*/            case R.id.detail_add_comment:
+            case R.id.detail_add_comment:
                 addComment();
                 break;
             /*case R.id.detail_star:
@@ -188,43 +187,5 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         shareIt();
     }
     //New code for webView from here
-    private class MyWebViewClient extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
-
-        @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            super.onPageStarted(view, url, favicon);
-        }
-
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            super.onPageFinished(view, url);
-        }
-
-        @Override
-        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-            super.onReceivedError(view, request, error);
-        }
-    }
-
-    public class MyJavaScriptInterface {
-        Activity activity;
-        public MyJavaScriptInterface(DetailActivity activity) {
-            this.activity=activity;
-        }
-        @JavascriptInterface
-        public void showToast(String toast) {
-            Toast.makeText(activity, toast, Toast.LENGTH_SHORT).show();
-        }
-
-        @JavascriptInterface
-        public void closeActivity() {
-            activity.finish();
-        }
-    }
     //Favorite implementation here
 }
