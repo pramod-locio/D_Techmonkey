@@ -33,6 +33,12 @@
     <item
         android:id="@+id/nav_opinion"
         android:title="@string/title_opinion"/>
+    <!--<item
+        android:id="@+id/nav_poll"
+        android:title="@string/title_poll"/>
+    <item
+        android:id="@+id/nav_quiz"
+        android:title="@string/title_quiz"/>-->
     <item
         android:id="@+id/setting"
         android:title="SETTINGS">
@@ -43,14 +49,14 @@
                     android:title="Language and Edition"
                     android:icon="@drawable/ic_action_feed"/>
 
-                <item
+               <!-- <item
                     android:id="@+id/lang_app"
                     android:title="App Language"
-                    android:icon="@drawable/ic_action_feed"/>
+                    android:icon="@drawable/ic_action_feed"/>-->
         </menu>
 
     </item>
-    <item
+    <!--<item
         android:id="@+id/help"
         android:title="HELP">
         <menu>
@@ -65,5 +71,5 @@
                 android:icon="@drawable/ic_action_feed"/>
 
         </menu>
-    </item>
+    </item>-->
 </menu>

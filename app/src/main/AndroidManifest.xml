@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dtechmonkey.d_techmonkey">
+
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.techmonkey.topyaps">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <application
+        android:name="com.techmonkey.topyaps.helper.Utils"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashScreen">
+        <activity android:name="com.techmonkey.topyaps.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".Language"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name="com.techmonkey.topyaps.Language"></activity>
+        <activity
+            android:name="com.techmonkey.topyaps.MainActivity"
+            android:label="">
             <intent-filter>
                 <action android:name="com.dtechmonkey.d_techmonkey.MainActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -35,20 +43,37 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".DetailActivity"
+            android:name="com.techmonkey.topyaps.DetailActivity"
             android:label=""
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="com.techmonkey.topyaps.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="MainActivity" />
+                android:value="com.techmonkey.topyaps.MainActivity" />
+            <intent-filter>
+                <action android:name="com.techmonkey.topyaps.NOTIFICATION_LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
-            android:name=".AddComment"
-            android:parentActivityName=".DetailActivity">
+            android:name="com.techmonkey.topyaps.AddComment"
+            android:parentActivityName="com.techmonkey.topyaps.DetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="DetailActivity" />
+                android:value="com.techmonkey.topyaps.DetailActivity" />
         </activity>
+
+        <service
+            android:name=".firebaseService.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".firebaseService.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

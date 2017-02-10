@@ -5,7 +5,7 @@
     android:id="@+id/activity_language"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.dtechmonkey.d_techmonkey.Language">
+    tools:context="com.techmonkey.topyaps.Language">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -18,10 +18,8 @@
             android:layout_height="?attr/actionBarSize">
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/app_logo_height"
-                android:layout_marginLeft="80dp"
-                android:paddingRight="@dimen/right_padding"
                 android:src="@drawable/app_logo" />
 
         </android.support.v7.widget.Toolbar>
@@ -40,7 +38,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
             android:paddingLeft="10dp"
-            android:text="Choose Any One Languages" />
+            android:text="@string/choose_language" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/language_recyclerView"
@@ -61,7 +59,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/my_rounded_corner"
-            android:itemBackground="@drawable/press_change_behaviour"
             android:text="CONTINUE"
             android:textColor="@color/textColorPrimary"
             android:textStyle="bold"/>
@@ -72,7 +69,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/my_rounded_corner"
-            android:itemBackground="@drawable/press_change_behaviour"
             android:text="SKIP"
             android:textColor="@color/textColorPrimary"
             android:textStyle="bold" />

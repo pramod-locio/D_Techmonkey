@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "883238495054",
+    "firebase_url": "https://topyaps-b78fb.firebaseio.com",
+    "project_id": "topyaps-b78fb",
+    "storage_bucket": "topyaps-b78fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883238495054:android:248481c5d11b25af",
+        "android_client_info": {
+          "package_name": "com.techmonkey.topyaps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883238495054-l751au7odgoun4g563oqi90tjk51jp7i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9ZcJM_XfB-ccMg-W3g83bKjOquN7_Umk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

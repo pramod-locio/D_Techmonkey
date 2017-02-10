@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/application_background"
-    tools:context="com.dtechmonkey.d_techmonkey.SplashScreen">
+    tools:context="com.techmonkey.topyaps.SplashScreen">
     <ImageView
         android:id="@+id/loading_img"
         android:layout_width="wrap_content"
@@ -13,13 +13,13 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:src="@drawable/app_logo"/>
-    <ProgressBar
+    <!--<ProgressBar
         android:id="@+id/progress_bar"
         android:layout_below="@+id/loading_img"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:foregroundTint="@color/application_background"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" />-->
 
 </RelativeLayout>

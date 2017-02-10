@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-        <item name="colorAccent">@color/textColorPrimary</item>
+        <item name="colorAccent">@color/grey</item>
         <item name="titleTextColor">@color/textColorPrimary</item>
 
     </style>
@@ -14,6 +14,9 @@
     </style>
     <style name="CustomTextColor" parent="AppTheme">
         <item name="android:textColor">@color/textColorPrimary</item>
+    </style>
+    <style name="progress" parent="AppTheme">
+        <item name="colorAccent">@color/black</item>
     </style>
 
 </resources>
